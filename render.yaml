@@ -1,0 +1,42 @@
+# render.yaml — NeuroCollab v3.0 MAX
+# Deploy on https://render.com by connecting this repo.
+# Creates TWO services: Flask REST API + Gradio UI
+#
+# Usage:
+#   git add render.yaml && git push
+#   On Render → New → Blueprint → select this repo
+
+services:
+
+  # ── Flask REST API ─────────────────────────────────────────────────────────
+  - type: web
+    name: neurocollab-api
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd flask_app && gunicorn app:app --workers 2 --timeout 120 --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: FLASK_ENV
+        value: production
+    healthCheckPath: /api/stats
+    autoDeploy: true
+
+  # ── Gradio / Hugging Face–style UI ─────────────────────────────────────────
+  - type: web
+    name: neurocollab-gradio
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python gradio_app.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: GRADIO_SERVER_PORT
+        value: "10000"
+      - key: GRADIO_SERVER_NAME
+        value: "0.0.0.0"
+    autoDeploy: true

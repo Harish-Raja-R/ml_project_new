@@ -1,0 +1,35 @@
+# NeuroCollab Academic Collaboration Predictor — v3.0 MAX
+# Requirements — covers Flask + Streamlit + Gradio + Render
+
+# ── Core ML ───────────────────────────────────────────────────────────────────
+numpy>=1.24.0
+pandas>=2.0.0
+networkx>=3.1
+scikit-learn>=1.3.0
+scipy>=1.11.0
+
+# ── Visualization ─────────────────────────────────────────────────────────────
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.18.0
+
+# ── Web Framework — Flask ─────────────────────────────────────────────────────
+flask>=3.0.0
+gunicorn>=21.2.0
+
+# ── Web Framework — Streamlit ─────────────────────────────────────────────────
+streamlit>=1.32.0
+
+# ── Web Framework — Gradio (Hugging Face Spaces) ─────────────────────────────
+gradio>=4.20.0
+
+# ── Boosting (highly recommended for max accuracy) ────────────────────────────
+xgboost>=2.0.0
+lightgbm>=4.1.0
+
+# ── Explainability (optional SHAP values) ────────────────────────────────────
+shap>=0.43.0
+
+# ── Jupyter (optional, for notebook exploration) ─────────────────────────────
+jupyter>=1.0.0
+ipykernel>=6.0.0

@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroCollab · Academic AI Predictor</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   ROOT TOKENS
+═══════════════════════════════════════════════════════ */
+:root {
+  --bg-deep:    #02040f;
+  --bg-space:   #040812;
+  --glass-1:    rgba(255,255,255,0.04);
+  --glass-2:    rgba(255,255,255,0.07);
+  --glass-3:    rgba(255,255,255,0.10);
+  --border-dim: rgba(255,255,255,0.06);
+  --border-mid: rgba(120,180,255,0.18);
+  --border-hot: rgba(120,180,255,0.45);
+  --neon-blue:  #5eb8ff;
+  --neon-violet:#b794f4;
+  --neon-teal:  #2dd4bf;
+  --neon-red:   #fc6b6b;
+  --neon-amber: #f59e0b;
+  --neon-pink:  #f472b6;
+  --text-1:     #eef2ff;
+  --text-2:     #94a3c4;
+  --text-3:     #4a5570;
+  --font:       'Syne', sans-serif;
+  --mono:       'DM Mono', monospace;
+  --r-card:     22px;
+  --r-input:    14px;
+  --shadow-neon:0 0 40px rgba(94,184,255,0.12);
+  --shadow-card:0 8px 40px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+}
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; font-size:16px; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg-deep);
+  color: var(--text-1);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════
+   ANIMATED COSMOS BACKGROUND
+═══════════════════════════════════════════════════════ */
+.cosmos {
+  position: fixed; inset:0; z-index:0;
+  background: var(--bg-space);
+  overflow: hidden;
+}
+
+.cosmos-layer {
+  position: absolute; inset:0;
+  background:
+    radial-gradient(ellipse 90% 70% at 8% 12%, rgba(30,60,200,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 55% at 92% 88%, rgba(130,60,200,0.15) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 45% at 50% 50%, rgba(20,100,160,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 20% 80%, rgba(45,212,191,0.07) 0%, transparent 50%);
+  animation: cosmosShift 22s ease-in-out infinite alternate;
+}
+@keyframes cosmosShift {
+  0%   { transform: scale(1) rotate(0deg); opacity:.9; }
+  50%  { transform: scale(1.06) rotate(0.3deg); opacity:1; }
+  100% { transform: scale(1.02) rotate(-0.2deg); opacity:.85; }
+}
+
+/* Fine grid */
+.cosmos-grid {
+  position: absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(94,184,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94,184,255,0.025) 1px, transparent 1px);
+  background-size: 52px 52px;
+  animation: gridDrift 35s linear infinite;
+}
+@keyframes gridDrift {
+  0%  { transform: translateY(0); }
+  100%{ transform: translateY(52px); }
+}
+
+/* Stars */
+.stars { position:absolute; inset:0; }
+.star {
+  position:absolute; border-radius:50%;
+  background:white; animation: twinkle var(--d,3s) ease-in-out infinite;
+  animation-delay: var(--delay,0s);
+}
+@keyframes twinkle {
+  0%,100%{ opacity:var(--o1,.4); transform:scale(1); }
+  50%    { opacity:var(--o2,.9); transform:scale(1.4); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════════════ */
+.page {
+  position: relative; z-index:1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 28px 100px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   GLASS CARD MIXIN
+═══════════════════════════════════════════════════════ */
+.glass {
+  background: var(--glass-1);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-card);
+}
+.glass-bright {
+  background: var(--glass-2);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-card), var(--shadow-neon);
+}
+
+/* ═══════════════════════════════════════════════════════
+   HERO SECTION
+═══════════════════════════════════════════════════════ */
+.hero {
+  text-align:center;
+  padding: 80px 0 56px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items:center; gap:10px;
+  padding: 8px 22px;
+  border-radius: 100px;
+  background: rgba(94,184,255,0.08);
+  border: 1px solid rgba(94,184,255,0.25);
+  font-size: 11px; font-weight:600; letter-spacing:.12em;
+  color: var(--neon-blue); text-transform:uppercase;
+  margin-bottom: 32px;
+  animation: fadeDown .6s ease both;
+}
+.badge-dot {
+  width:7px; height:7px; border-radius:50%;
+  background:var(--neon-teal);
+  box-shadow: 0 0 10px var(--neon-teal);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-16px);} to{opacity:1;transform:none;} }
+
+.hero-title {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  background: linear-gradient(135deg, #ffffff 0%, var(--neon-blue) 40%, var(--neon-violet) 80%, var(--neon-pink) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 18px;
+  animation: fadeDown .7s .1s ease both;
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  color: var(--text-2); font-weight:400; line-height:1.65;
+  max-width: 640px; margin: 0 auto 44px;
+  animation: fadeDown .7s .2s ease both;
+}
+
+/* Stats strip */
+.stats-strip {
+  display: flex; justify-content:center; gap: 2px;
+  flex-wrap: wrap;
+  animation: fadeDown .7s .35s ease both;
+}
+.stat-pill {
+  padding: 10px 24px;
+  background: var(--glass-1);
+  border: 1px solid var(--border-dim);
+  border-radius: 100px;
+  backdrop-filter: blur(20px);
+  display:flex; align-items:center; gap:10px;
+}
+.stat-val {
+  font-size: 1.15rem; font-weight:700; color:var(--text-1);
+  font-family: var(--mono);
+}
+.stat-lbl { font-size:.75rem; color:var(--text-2); letter-spacing:.05em; }
+.stat-dot { width:6px; height:6px; border-radius:50%; }
+
+/* ═══════════════════════════════════════════════════════
+   MAIN GRID
+═══════════════════════════════════════════════════════ */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 440px;
+  gap: 24px;
+  align-items: start;
+}
+@media(max-width:900px){
+  .main-grid { grid-template-columns:1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   INPUT PANEL
+═══════════════════════════════════════════════════════ */
+.panel-header {
+  display:flex; align-items:center; gap:12px;
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid var(--border-dim);
+}
+.panel-icon {
+  width:38px; height:38px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px;
+  background: linear-gradient(135deg, rgba(94,184,255,0.15), rgba(183,148,244,0.1));
+  border: 1px solid rgba(94,184,255,0.2);
+}
+.panel-title { font-size:1rem; font-weight:700; letter-spacing:-.01em; }
+.panel-sub   { font-size:.75rem; color:var(--text-2); margin-top:2px; }
+
+.form-body { padding: 22px 28px 28px; }
+
+/* Section tabs */
+.param-tabs {
+  display:flex; gap:6px; margin-bottom:20px;
+  background: rgba(0,0,0,0.3); border-radius:12px; padding:5px;
+}
+.param-tab {
+  flex:1; padding:8px 4px;
+  border:none; border-radius:9px;
+  background:transparent; color:var(--text-2);
+  font-family:var(--font); font-size:.78rem; font-weight:600;
+  cursor:pointer; transition:all .25s;
+  text-align:center;
+}
+.param-tab.active {
+  background: var(--glass-3);
+  color: var(--neon-blue);
+  border: 1px solid var(--border-mid);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+/* Tab pane */
+.param-pane { display:none; }
+.param-pane.active { display:block; }
+
+/* Form group */
+.form-group { margin-bottom:16px; }
+.form-row   { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+.form-label {
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:.78rem; font-weight:600; color:var(--text-2);
+  margin-bottom:6px; letter-spacing:.04em;
+}
+.form-label-val {
+  font-family:var(--mono); font-size:.82rem;
+  color:var(--neon-blue); font-weight:500;
+}
+
+/* Slider */
+.slider-wrap { position:relative; }
+input[type=range] {
+  -webkit-appearance:none; appearance:none;
+  width:100%; height:6px;
+  border-radius:3px; outline:none; cursor:pointer;
+  background: linear-gradient(90deg, var(--neon-blue) var(--pct,50%), rgba(255,255,255,0.08) var(--pct,50%));
+  transition: background .05s;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance:none;
+  width:18px; height:18px; border-radius:50%;
+  background:var(--neon-blue);
+  box-shadow:0 0 12px rgba(94,184,255,0.6), 0 0 0 3px rgba(94,184,255,0.15);
+  cursor:pointer; transition: transform .15s;
+}
+input[type=range]:hover::-webkit-slider-thumb { transform:scale(1.25); }
+
+/* Toggle switch */
+.toggle-row {
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(0,0,0,0.25); border:1px solid var(--border-dim);
+  border-radius:12px; padding:12px 16px; margin-bottom:14px;
+}
+.toggle-info .toggle-name { font-size:.84rem; font-weight:600; }
+.toggle-info .toggle-desc { font-size:.72rem; color:var(--text-2); margin-top:2px; }
+.toggle {
+  position:relative; width:44px; height:24px;
+  flex-shrink:0;
+}
+.toggle input { opacity:0; width:0; height:0; }
+.toggle-track {
+  position:absolute; inset:0; border-radius:12px;
+  background:rgba(255,255,255,0.08); border:1px solid var(--border-dim);
+  cursor:pointer; transition: background .3s, border-color .3s;
+}
+.toggle-track::after {
+  content:''; position:absolute;
+  width:18px; height:18px; border-radius:50%;
+  background:var(--text-2);
+  top:2px; left:2px;
+  transition: transform .3s, background .3s;
+}
+.toggle input:checked + .toggle-track {
+  background:rgba(45,212,191,0.2);
+  border-color:var(--neon-teal);
+}
+.toggle input:checked + .toggle-track::after {
+  transform:translateX(20px);
+  background:var(--neon-teal);
+  box-shadow:0 0 10px rgba(45,212,191,0.5);
+}
+
+/* Number inputs */
+.num-input {
+  width:100%; padding:9px 12px;
+  background:rgba(0,0,0,0.3); border:1px solid var(--border-dim);
+  border-radius:var(--r-input); color:var(--text-1);
+  font-family:var(--mono); font-size:.85rem;
+  outline:none; transition:border-color .2s, box-shadow .2s;
+}
+.num-input:focus {
+  border-color:var(--border-hot);
+  box-shadow:0 0 0 3px rgba(94,184,255,0.1);
+}
+
+/* Predict button */
+.predict-btn {
+  width:100%; padding:16px;
+  margin-top:20px;
+  border:none; border-radius:16px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed, #0891b2);
+  background-size:200% 200%;
+  color:white; font-family:var(--font); font-size:1rem; font-weight:700;
+  letter-spacing:-.01em; cursor:pointer;
+  position:relative; overflow:hidden;
+  transition: transform .2s, box-shadow .2s;
+  animation: gradShift 4s ease infinite;
+}
+@keyframes gradShift {
+  0%,100%{ background-position:0% 50%; }
+  50%    { background-position:100% 50%; }
+}
+.predict-btn:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(37,99,235,0.4); }
+.predict-btn:active{ transform:translateY(0); }
+.predict-btn::before {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  transform:translateX(-100%); transition:none;
+}
+.predict-btn:hover::before { animation:shimmer .6s ease forwards; }
+@keyframes shimmer { to{ transform:translateX(100%); } }
+.btn-inner { display:flex; align-items:center; justify-content:center; gap:10px; }
+.btn-icon  { font-size:1.2rem; }
+
+/* Loading spinner */
+.spinner {
+  width:18px; height:18px; border-radius:50%;
+  border:2px solid rgba(255,255,255,0.3);
+  border-top-color:white; display:none;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin { to{transform:rotate(360deg);} }
+
+/* ═══════════════════════════════════════════════════════
+   RESULT PANEL
+═══════════════════════════════════════════════════════ */
+.result-panel { position:sticky; top:24px; }
+
+/* Score ring */
+.score-display {
+  padding: 32px 28px;
+  text-align:center;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.ring-container {
+  position:relative; width:180px; height:180px;
+  margin: 0 auto 24px;
+}
+.ring-svg { transform:rotate(-90deg); }
+.ring-bg   { fill:none; stroke:rgba(255,255,255,0.05); stroke-width:10; }
+.ring-fill {
+  fill:none; stroke-width:10; stroke-linecap:round;
+  stroke-dasharray:502; stroke-dashoffset:502;
+  transition: stroke-dashoffset 1s cubic-bezier(.4,0,.2,1), stroke .5s;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+.ring-center {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.ring-score {
+  font-size:2.8rem; font-weight:800;
+  font-family:var(--mono); line-height:1;
+  background:linear-gradient(135deg, white, var(--neon-blue));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.ring-pct { font-size:.75rem; color:var(--text-2); font-weight:500; margin-top:2px; }
+
+.verdict-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 20px; border-radius:100px;
+  font-size:.85rem; font-weight:700;
+  border: 1px solid;
+  margin-bottom:12px;
+  transition: all .4s;
+}
+.verdict-badge.high   { background:rgba(45,212,191,0.1); border-color:rgba(45,212,191,0.4); color:var(--neon-teal); }
+.verdict-badge.medium { background:rgba(245,158,11,0.1); border-color:rgba(245,158,11,0.4); color:var(--neon-amber); }
+.verdict-badge.low-medium{ background:rgba(251,146,60,0.1); border-color:rgba(251,146,60,0.4); color:#fb923c; }
+.verdict-badge.low    { background:rgba(252,107,107,0.1); border-color:rgba(252,107,107,0.4); color:var(--neon-red); }
+
+.advice-text {
+  font-size:.83rem; color:var(--text-2); line-height:1.65;
+  max-width:320px; margin:0 auto;
+}
+
+/* Feature breakdown */
+.breakdown-section { padding:22px 28px; border-bottom:1px solid var(--border-dim); }
+.section-title {
+  font-size:.72rem; font-weight:700; color:var(--text-3);
+  letter-spacing:.1em; text-transform:uppercase;
+  margin-bottom:14px;
+}
+
+.feature-bar {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:10px;
+}
+.feat-name {
+  font-size:.74rem; color:var(--text-2); flex:0 0 130px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.feat-track {
+  flex:1; height:6px; border-radius:3px;
+  background:rgba(255,255,255,0.05); position:relative; overflow:hidden;
+}
+.feat-fill {
+  height:100%; border-radius:3px;
+  transition: width 1s cubic-bezier(.4,0,.2,1);
+}
+.feat-val {
+  font-family:var(--mono); font-size:.72rem;
+  color:var(--text-2); flex:0 0 40px; text-align:right;
+}
+
+/* Insights */
+.insight-item {
+  display:flex; gap:10px; align-items:flex-start;
+  padding:10px 14px; border-radius:12px;
+  margin-bottom:8px; font-size:.78rem; line-height:1.55;
+}
+.insight-item.positive { background:rgba(45,212,191,0.06); border-left:3px solid var(--neon-teal); }
+.insight-item.neutral  { background:rgba(94,184,255,0.06); border-left:3px solid var(--neon-blue); }
+.insight-item.negative { background:rgba(252,107,107,0.06); border-left:3px solid var(--neon-red); }
+.insight-icon { flex-shrink:0; font-size:.95rem; }
+
+/* ML label */
+.ml-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:4px 12px; border-radius:100px;
+  font-size:.7rem; font-weight:600; letter-spacing:.05em;
+  background:rgba(183,148,244,0.1); border:1px solid rgba(183,148,244,0.3);
+  color:var(--neon-violet); margin-top:8px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODEL DASHBOARD (below main grid)
+═══════════════════════════════════════════════════════ */
+.dashboard {
+  margin-top:28px;
+}
+.dash-title {
+  font-size:1.3rem; font-weight:700; margin-bottom:20px;
+  display:flex; align-items:center; gap:12px;
+}
+.dash-title-accent {
+  display:inline-block; width:3px; height:22px;
+  border-radius:2px;
+  background:linear-gradient(to bottom, var(--neon-blue), var(--neon-violet));
+}
+
+.dash-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:18px;
+}
+
+.model-card {
+  padding:20px 22px;
+  position:relative; overflow:hidden;
+  transition: transform .2s, box-shadow .2s;
+}
+.model-card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 16px 50px rgba(0,0,0,0.6), 0 0 20px rgba(94,184,255,0.08);
+}
+.model-card.best-model {
+  border-color:rgba(94,184,255,0.4);
+  background:linear-gradient(135deg, rgba(94,184,255,0.06), rgba(183,148,244,0.04));
+}
+.model-card.best-model::before {
+  content:''; position:absolute; inset:-1px; border-radius:var(--r-card);
+  background:linear-gradient(135deg, rgba(94,184,255,0.3), rgba(183,148,244,0.2), transparent);
+  z-index:-1;
+}
+
+.best-crown {
+  position:absolute; top:12px; right:12px;
+  background:linear-gradient(135deg, #f59e0b, #f97316);
+  color:white; font-size:.65rem; font-weight:700;
+  padding:3px 10px; border-radius:100px;
+  letter-spacing:.06em;
+}
+
+.model-name { font-size:.95rem; font-weight:700; margin-bottom:14px; }
+
+.model-metrics {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.metric-chip {
+  background:rgba(0,0,0,0.25); border:1px solid var(--border-dim);
+  border-radius:10px; padding:8px 10px;
+  text-align:center;
+}
+.metric-name { font-size:.65rem; color:var(--text-3); letter-spacing:.06em; text-transform:uppercase; }
+.metric-val  { font-family:var(--mono); font-size:.92rem; font-weight:500; color:var(--text-1); margin-top:2px; }
+
+/* AUC bar across bottom of card */
+.auc-bar-wrap {
+  margin-top:14px;
+  display:flex; align-items:center; gap:10px;
+}
+.auc-bar-label { font-size:.7rem; color:var(--text-2); flex:0 0 38px; }
+.auc-bar-track { flex:1; height:6px; background:rgba(255,255,255,0.05); border-radius:3px; }
+.auc-bar-fill  { height:100%; border-radius:3px; transition:width 1s .3s ease; }
+.auc-bar-val   { font-family:var(--mono); font-size:.75rem; color:var(--neon-blue); flex:0 0 44px; text-align:right; }
+
+/* ═══════════════════════════════════════════════════════
+   FEATURE IMPORTANCE RADAR
+═══════════════════════════════════════════════════════ */
+.fi-section { margin-top:22px; }
+.fi-grid {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:14px;
+  padding:24px;
+}
+@media(max-width:768px){.fi-grid{grid-template-columns:1fr 1fr;}}
+.fi-item { display:flex; flex-direction:column; gap:6px; }
+.fi-name  { font-size:.72rem; color:var(--text-2); }
+.fi-track { height:5px; background:rgba(255,255,255,0.05); border-radius:3px; }
+.fi-fill  { height:100%; border-radius:3px; background:linear-gradient(90deg, var(--neon-blue), var(--neon-violet)); }
+.fi-val   { font-family:var(--mono); font-size:.72rem; color:var(--neon-blue); }
+
+/* ═══════════════════════════════════════════════════════
+   BOTTOM INFO
+═══════════════════════════════════════════════════════ */
+.info-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:18px; margin-top:22px;
+}
+.info-card {
+  padding:22px;
+}
+.info-icon { font-size:1.6rem; margin-bottom:12px; }
+.info-title { font-size:.9rem; font-weight:700; margin-bottom:6px; }
+.info-body  { font-size:.78rem; color:var(--text-2); line-height:1.65; }
+
+/* ═══════════════════════════════════════════════════════
+   FLOATING PARTICLES
+═══════════════════════════════════════════════════════ */
+.particles { position:fixed; inset:0; z-index:0; pointer-events:none; }
+.particle {
+  position:absolute; width:2px; height:2px; border-radius:50%;
+  opacity:0;
+  animation: floatUp var(--dur,8s) linear infinite;
+  animation-delay:var(--delay,0s);
+}
+@keyframes floatUp {
+  0%  { transform:translateY(100vh) translateX(var(--drift,0px)); opacity:0; }
+  10% { opacity:var(--op,.6); }
+  90% { opacity:var(--op,.6); }
+  100%{ transform:translateY(-10vh) translateX(var(--drift,0px)); opacity:0; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   UTILITY
+═══════════════════════════════════════════════════════ */
+.placeholder-state {
+  padding:40px 28px; text-align:center;
+}
+.placeholder-icon {
+  font-size:3.5rem; margin-bottom:18px; opacity:.4;
+  animation:float 3s ease-in-out infinite;
+}
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+.placeholder-text { color:var(--text-2); font-size:.9rem; line-height:1.6; }
+
+.hidden  { display:none !important; }
+.visible { display:block !important; }
+
+/* Tooltip */
+.tooltip {
+  position:relative; cursor:help;
+}
+.tooltip::after {
+  content:attr(data-tip);
+  position:absolute; bottom:calc(100% + 8px); left:50%;
+  transform:translateX(-50%);
+  background:rgba(10,14,30,0.95); border:1px solid var(--border-mid);
+  color:var(--text-1); font-size:.72rem; font-weight:400;
+  padding:6px 12px; border-radius:8px; white-space:nowrap;
+  opacity:0; pointer-events:none;
+  transition:opacity .2s;
+}
+.tooltip:hover::after { opacity:1; }
+</style>
+</head>
+<body>
+
+<!-- COSMOS BACKGROUND -->
+<div class="cosmos">
+  <div class="cosmos-layer"></div>
+  <div class="cosmos-grid"></div>
+  <div class="stars" id="stars"></div>
+</div>
+
+<!-- PARTICLES -->
+<div class="particles" id="particles"></div>
+
+<!-- MAIN PAGE -->
+<div class="page">
+
+  <!-- ── HERO ─────────────────────────────────────────── -->
+  <header class="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span>DBLP · Graph ML · v3.0 MAX</span>
+    </div>
+    <h1 class="hero-title">NeuroCollab<br>AI Predictor</h1>
+    <p class="hero-sub">
+      Predict academic collaboration probability using a 25-feature graph neural ensemble
+      trained on {{ stats.graph_nodes | default('15,000') | int | format_int }} researchers
+      and {{ stats.graph_edges | default('8,664') | int | format_int }} co-authorship edges from DBLP.
+    </p>
+
+    <div class="stats-strip">
+      <div class="stat-pill">
+        <span class="stat-dot" style="background:var(--neon-teal);box-shadow:0 0 8px var(--neon-teal)"></span>
+        <span class="stat-val">{{ stats.graph_nodes | default(15000) | format_int }}</span>
+        <span class="stat-lbl">Researchers</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-dot" style="background:var(--neon-blue);box-shadow:0 0 8px var(--neon-blue)"></span>
+        <span class="stat-val">{{ stats.graph_edges | default(8664) | format_int }}</span>
+        <span class="stat-lbl">Co-Author Links</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-dot" style="background:var(--neon-violet);box-shadow:0 0 8px var(--neon-violet)"></span>
+        <span class="stat-val">{{ stats.num_features | default(25) }}</span>
+        <span class="stat-lbl">Features</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-dot" style="background:var(--neon-amber);box-shadow:0 0 8px var(--neon-amber)"></span>
+        <span class="stat-val" id="best-auc-hero">99.3%</span>
+        <span class="stat-lbl">Best AUC</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-dot" style="background:var(--neon-pink);box-shadow:0 0 8px var(--neon-pink)"></span>
+        <span class="stat-val">{{ stats.total_samples | default(12000) | format_int }}</span>
+        <span class="stat-lbl">Train Samples</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── MAIN GRID ──────────────────────────────────── -->
+  <div class="main-grid">
+
+    <!-- INPUT PANEL -->
+    <div class="glass-bright">
+      <div class="panel-header">
+        <div class="panel-icon">🔬</div>
+        <div>
+          <div class="panel-title">Researcher Pair Configuration</div>
+          <div class="panel-sub">Configure network parameters for both researchers</div>
+        </div>
+      </div>
+
+      <div class="form-body">
+        <div class="param-tabs">
+          <button class="param-tab active" data-tab="network">🕸 Network</button>
+          <button class="param-tab" data-tab="community">🏛 Community</button>
+          <button class="param-tab" data-tab="advanced">⚙️ Advanced</button>
+        </div>
+
+        <!-- NETWORK TAB -->
+        <div class="param-pane active" id="pane-network">
+
+          <div class="form-group">
+            <div class="form-label">
+              <span class="tooltip" data-tip="Researchers who collaborated with both A and B">Common Collaborators</span>
+              <span class="form-label-val" id="val-cn">0</span>
+            </div>
+            <input type="range" id="sl-cn" min="0" max="25" value="0" oninput="updateSlider(this,'val-cn')">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <div class="form-label">
+                <span class="tooltip" data-tip="Total papers / collaborations of Researcher A">Degree (Author A)</span>
+                <span class="form-label-val" id="val-du">5</span>
+              </div>
+              <input type="range" id="sl-du" min="1" max="100" value="5" oninput="updateSlider(this,'val-du')">
+            </div>
+            <div class="form-group">
+              <div class="form-label">
+                <span class="tooltip" data-tip="Total papers / collaborations of Researcher B">Degree (Author B)</span>
+                <span class="form-label-val" id="val-dv">5</span>
+              </div>
+              <input type="range" id="sl-dv" min="1" max="100" value="5" oninput="updateSlider(this,'val-dv')">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <div class="form-label">
+                <span class="tooltip" data-tip="Local clustering coefficient of A (0–1)">Clustering A</span>
+                <span class="form-label-val" id="val-cu">0.10</span>
+              </div>
+              <input type="range" id="sl-cu" min="0" max="100" value="10" oninput="updateSliderScale(this,'val-cu',100,2)">
+            </div>
+            <div class="form-group">
+              <div class="form-label">
+                <span class="tooltip" data-tip="Local clustering coefficient of B (0–1)">Clustering B</span>
+                <span class="form-label-val" id="val-cv">0.10</span>
+              </div>
+              <input type="range" id="sl-cv" min="0" max="100" value="10" oninput="updateSliderScale(this,'val-cv',100,2)">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <div class="form-label">
+                <span class="tooltip" data-tip="Number of triangles containing node A">Triangles A</span>
+                <span class="form-label-val" id="val-tru">2</span>
+              </div>
+              <input type="range" id="sl-tru" min="0" max="50" value="2" oninput="updateSlider(this,'val-tru')">
+            </div>
+            <div class="form-group">
+              <div class="form-label">
+                <span class="tooltip" data-tip="Number of triangles containing node B">Triangles B</span>
+                <span class="form-label-val" id="val-trv">2</span>
+              </div>
+              <input type="range" id="sl-trv" min="0" max="50" value="2" oninput="updateSlider(this,'val-trv')">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COMMUNITY TAB -->
+        <div class="param-pane" id="pane-community">
+
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-name">Same Research Community</div>
+              <div class="toggle-desc">Both researchers publish in same sub-field cluster</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="cb-sc">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <div class="form-label">
+                <span class="tooltip" data-tip="Size of community that Author A belongs to">Community Size A</span>
+                <span class="form-label-val" id="val-csu">100</span>
+              </div>
+              <input type="range" id="sl-csu" min="5" max="2000" value="100" oninput="updateSlider(this,'val-csu')">
+            </div>
+            <div class="form-group">
+              <div class="form-label">
+                <span class="tooltip" data-tip="Size of community that Author B belongs to">Community Size B</span>
+                <span class="form-label-val" id="val-csv">100</span>
+              </div>
+              <input type="range" id="sl-csv" min="5" max="2000" value="100" oninput="updateSlider(this,'val-csv')">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ADVANCED TAB -->
+        <div class="param-pane" id="pane-advanced">
+          <p style="font-size:.78rem;color:var(--text-2);margin-bottom:16px;">
+            Advanced centrality measures. Leave defaults for typical analysis.
+          </p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <div class="form-label">PageRank A (×10⁻⁴)</div>
+              <input class="num-input" type="number" id="inp-pru" value="1.0" min="0.01" max="100" step="0.1">
+            </div>
+            <div class="form-group">
+              <div class="form-label">PageRank B (×10⁻⁴)</div>
+              <input class="num-input" type="number" id="inp-prv" value="1.0" min="0.01" max="100" step="0.1">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <div class="form-label">
+                <span class="tooltip" data-tip="k-core number: max subgraph in which every node has degree ≥ k">Core Number A</span>
+                <span class="form-label-val" id="val-coa">2</span>
+              </div>
+              <input type="range" id="sl-coa" min="1" max="20" value="2" oninput="updateSlider(this,'val-coa')">
+            </div>
+            <div class="form-group">
+              <div class="form-label">
+                <span class="tooltip" data-tip="k-core number of Researcher B">Core Number B</span>
+                <span class="form-label-val" id="val-cob">2</span>
+              </div>
+              <input type="range" id="sl-cob" min="1" max="20" value="2" oninput="updateSlider(this,'val-cob')">
+            </div>
+          </div>
+        </div>
+
+        <button class="predict-btn" id="predict-btn" onclick="runPrediction()">
+          <div class="btn-inner">
+            <div class="spinner" id="spinner"></div>
+            <span id="btn-icon" class="btn-icon">🧠</span>
+            <span id="btn-text">Predict Collaboration</span>
+          </div>
+        </button>
+
+      </div><!-- /form-body -->
+    </div><!-- /input panel -->
+
+    <!-- RESULT PANEL -->
+    <div class="result-panel">
+      <div class="glass-bright" id="result-container">
+
+        <!-- Placeholder -->
+        <div class="placeholder-state" id="placeholder">
+          <div class="placeholder-icon">🔭</div>
+          <div class="placeholder-text">
+            Configure the researcher parameters and click<br>
+            <strong style="color:var(--neon-blue)">Predict Collaboration</strong><br><br>
+            The AI ensemble will analyze 25 graph features<br>
+            and predict connection probability.
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="hidden" id="result-content">
+          <!-- Score -->
+          <div class="score-display">
+            <div class="ring-container">
+              <svg class="ring-svg" viewBox="0 0 180 180" width="180" height="180">
+                <circle class="ring-bg" cx="90" cy="90" r="80"/>
+                <circle class="ring-fill" id="ring-fill" cx="90" cy="90" r="80" stroke="var(--neon-teal)"/>
+              </svg>
+              <div class="ring-center">
+                <div class="ring-score" id="ring-score">—</div>
+                <div class="ring-pct">out of 100</div>
+              </div>
+            </div>
+
+            <div class="verdict-badge" id="verdict-badge">
+              <span id="verdict-emoji">⚡</span>
+              <span id="verdict-text">—</span>
+            </div>
+
+            <p class="advice-text" id="advice-text"></p>
+
+            <div class="ml-badge" id="ml-badge">
+              <span>🤖</span>
+              <span id="ml-label">ML Model Active</span>
+            </div>
+          </div>
+
+          <!-- Insights -->
+          <div class="breakdown-section" id="insights-section">
+            <div class="section-title">AI Insights</div>
+            <div id="insights-list"></div>
+          </div>
+
+          <!-- Top features -->
+          <div class="breakdown-section" id="feat-section">
+            <div class="section-title">Top Contributing Features</div>
+            <div id="pos-features"></div>
+            <div style="margin-top:12px;margin-bottom:8px;" class="section-title" id="neg-title">Limiting Factors</div>
+            <div id="neg-features"></div>
+          </div>
+
+          <!-- Raw feature values -->
+          <div class="breakdown-section">
+            <div class="section-title" style="margin-bottom:12px;">Computed Feature Values</div>
+            <div id="feature-vals" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-family:var(--mono);font-size:.72rem;"></div>
+          </div>
+
+        </div><!-- /result-content -->
+      </div><!-- /glass-bright -->
+    </div><!-- /result-panel -->
+
+  </div><!-- /main-grid -->
+
+  <!-- ── MODEL DASHBOARD ───────────────────────────── -->
+  <div class="dashboard">
+    <div class="dash-title">
+      <span class="dash-title-accent"></span>
+      Model Performance Dashboard
+    </div>
+
+    <div class="dash-grid" id="model-cards">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+
+  <!-- ── FEATURE IMPORTANCE ────────────────────────── -->
+  <div class="fi-section">
+    <div class="glass" style="margin-top:18px;">
+      <div class="panel-header">
+        <div class="panel-icon">📊</div>
+        <div>
+          <div class="panel-title">Feature Importance — Random Forest</div>
+          <div class="panel-sub">Relative importance of all 25 graph features</div>
+        </div>
+      </div>
+      <div class="fi-grid" id="fi-grid">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ── INFO CARDS ──────────────────────────────── -->
+  <div class="info-grid" style="margin-top:22px;">
+    <div class="glass info-card">
+      <div class="info-icon">🕸️</div>
+      <div class="info-title">Graph-Based ML</div>
+      <div class="info-body">25 structural features extracted from the DBLP co-authorship network. Includes common neighbors, Jaccard, Adamic-Adar, PageRank, k-core and more.</div>
+    </div>
+    <div class="glass info-card">
+      <div class="info-icon">🏆</div>
+      <div class="info-title">Ensemble Models</div>
+      <div class="info-body">XGBoost, LightGBM, HistGradient Boosting, Random Forest, Extra Trees, MLP Neural Network and a Voting Ensemble — all trained and benchmarked.</div>
+    </div>
+    <div class="glass info-card">
+      <div class="info-icon">🎯</div>
+      <div class="info-title">High Accuracy</div>
+      <div class="info-body">Best model achieves 99.3% AUC-ROC and 95.3% accuracy on held-out test set with 5-fold cross-validation confirming generalization.</div>
+    </div>
+    <div class="glass info-card">
+      <div class="info-icon">💡</div>
+      <div class="info-title">Explainable AI</div>
+      <div class="info-body">Every prediction comes with feature contributions, AI-generated insights, and a detailed breakdown of what drives the compatibility score.</div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+/* ══════════════════════════════════════════════
+   BACKGROUND EFFECTS
+══════════════════════════════════════════════ */
+(function initBg(){
+  // Stars
+  const starsEl = document.getElementById('stars');
+  for(let i=0;i<120;i++){
+    const s = document.createElement('div');
+    s.className='star';
+    const sz = Math.random()*2+0.5;
+    s.style.cssText=`
+      width:${sz}px;height:${sz}px;
+      left:${Math.random()*100}%;top:${Math.random()*100}%;
+      --d:${2+Math.random()*5}s;--delay:${Math.random()*6}s;
+      --o1:${0.1+Math.random()*0.4};--o2:${0.5+Math.random()*0.5};
+    `;
+    starsEl.appendChild(s);
+  }
+
+  // Particles
+  const partEl = document.getElementById('particles');
+  const partColors=['#5eb8ff','#b794f4','#2dd4bf','#f472b6'];
+  for(let i=0;i<40;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    const col=partColors[Math.floor(Math.random()*partColors.length)];
+    p.style.cssText=`
+      left:${Math.random()*100}%;
+      background:${col};
+      box-shadow:0 0 6px ${col};
+      --dur:${8+Math.random()*14}s;--delay:${Math.random()*12}s;
+      --drift:${(Math.random()-0.5)*200}px;
+      --op:${0.3+Math.random()*0.6};
+    `;
+    partEl.appendChild(p);
+  }
+})();
+
+/* ══════════════════════════════════════════════
+   MODEL DATA (from Flask)
+══════════════════════════════════════════════ */
+const MODEL_RESULTS = {{ stats.model_results | tojson }};
+const BEST_MODEL    = {{ stats.best_model | tojson }};
+const FEAT_IMP      = {{ stats.feature_importance | tojson }};
+
+/* ══════════════════════════════════════════════
+   SLIDER HELPERS
+══════════════════════════════════════════════ */
+function updateSlider(el, valId){
+  const v = el.value;
+  document.getElementById(valId).textContent = v;
+  const pct = ((v - el.min) / (el.max - el.min)) * 100;
+  el.style.setProperty('--pct', pct + '%');
+}
+function updateSliderScale(el, valId, scale, decimals){
+  const v = (el.value / scale).toFixed(decimals);
+  document.getElementById(valId).textContent = v;
+  const pct = ((el.value - el.min) / (el.max - el.min)) * 100;
+  el.style.setProperty('--pct', pct + '%');
+}
+
+// Init slider pct on page load
+document.querySelectorAll('input[type=range]').forEach(el => {
+  const pct = ((el.value - el.min) / (el.max - el.min)) * 100;
+  el.style.setProperty('--pct', pct + '%');
+});
+
+/* ══════════════════════════════════════════════
+   TABS
+══════════════════════════════════════════════ */
+document.querySelectorAll('.param-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.param-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.param-pane').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('pane-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ══════════════════════════════════════════════
+   PREDICTION
+══════════════════════════════════════════════ */
+async function runPrediction(){
+  const btn  = document.getElementById('predict-btn');
+  const spin = document.getElementById('spinner');
+  const icon = document.getElementById('btn-icon');
+  const txt  = document.getElementById('btn-text');
+
+  btn.disabled = true;
+  spin.style.display = 'block';
+  icon.style.display = 'none';
+  txt.textContent = 'Analyzing…';
+
+  const payload = {
+    common_neighbors: +document.getElementById('sl-cn').value,
+    degree_u:  +document.getElementById('sl-du').value,
+    degree_v:  +document.getElementById('sl-dv').value,
+    same_community: document.getElementById('cb-sc').checked ? 1 : 0,
+    clust_u:  document.getElementById('sl-cu').value / 100,
+    clust_v:  document.getElementById('sl-cv').value / 100,
+    tri_u:    +document.getElementById('sl-tru').value,
+    tri_v:    +document.getElementById('sl-trv').value,
+    cs_u:     +document.getElementById('sl-csu').value,
+    cs_v:     +document.getElementById('sl-csv').value,
+    pr_u:     document.getElementById('inp-pru').value / 10000,
+    pr_v:     document.getElementById('inp-prv').value / 10000,
+    core_u:   +document.getElementById('sl-coa').value,
+    core_v:   +document.getElementById('sl-cob').value,
+  };
+
+  try {
+    const resp = await fetch('/predict', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await resp.json();
+    displayResult(data);
+  } catch(e) {
+    console.error(e);
+    alert('Prediction failed — check server connection');
+  } finally {
+    btn.disabled = false;
+    spin.style.display = 'none';
+    icon.style.display = 'inline';
+    txt.textContent = 'Predict Collaboration';
+  }
+}
+
+/* ══════════════════════════════════════════════
+   DISPLAY RESULT
+══════════════════════════════════════════════ */
+function displayResult(data) {
+  document.getElementById('placeholder').classList.add('hidden');
+  document.getElementById('result-content').classList.remove('hidden');
+
+  // Score ring
+  const score = data.score;
+  const ringFill = document.getElementById('ring-fill');
+  const circumference = 2 * Math.PI * 80;  // 502.65
+  const offset = circumference - (score / 100) * circumference;
+
+  // Color by level
+  const levelColors = {
+    'high':'#2dd4bf','medium':'#f59e0b','low-medium':'#fb923c','low':'#fc6b6b'
+  };
+  const ringColor = levelColors[data.level] || '#5eb8ff';
+  ringFill.style.stroke = ringColor;
+  ringFill.style.strokeDashoffset = offset;
+  ringFill.style.filter = `drop-shadow(0 0 12px ${ringColor})`;
+
+  document.getElementById('ring-score').textContent = score.toFixed(1);
+
+  // Verdict badge
+  const badge = document.getElementById('verdict-badge');
+  badge.className = `verdict-badge ${data.level}`;
+  document.getElementById('verdict-emoji').textContent = data.emoji || '⚡';
+  document.getElementById('verdict-text').textContent  = data.verdict;
+  document.getElementById('advice-text').textContent   = data.advice;
+
+  // ML badge
+  const mlLbl = document.getElementById('ml-label');
+  if(data.used_ml_model){
+    mlLbl.textContent = `${data.model_name} · ML Active`;
+  } else {
+    mlLbl.textContent = 'Formula Fallback (ML model not loaded)';
+  }
+
+  // Insights
+  const insightList = document.getElementById('insights-list');
+  insightList.innerHTML = '';
+  (data.insights || []).forEach(ins => {
+    const d = document.createElement('div');
+    d.className = `insight-item ${ins.type}`;
+    const icons = {positive:'✅',neutral:'ℹ️',negative:'⚠️'};
+    d.innerHTML = `<span class="insight-icon">${icons[ins.type]||'💡'}</span><span>${ins.text}</span>`;
+    insightList.appendChild(d);
+  });
+
+  // Top positive features
+  const posEl = document.getElementById('pos-features');
+  posEl.innerHTML = '';
+  (data.top_positive || []).forEach(f => {
+    posEl.innerHTML += featureBar(f.feature, f.value, '#2dd4bf', 30);
+  });
+
+  // Negative features
+  const negEl = document.getElementById('neg-features');
+  negEl.innerHTML = '';
+  (data.top_negative || []).forEach(f => {
+    negEl.innerHTML += featureBar(f.feature, Math.abs(f.value), '#fc6b6b', 15);
+  });
+
+  // Raw feature grid
+  const fv = document.getElementById('feature-vals');
+  fv.innerHTML = '';
+  const feats = data.features || {};
+  Object.entries(feats).slice(0,16).forEach(([k,v]) => {
+    fv.innerHTML += `
+      <div style="background:rgba(0,0,0,0.2);border:1px solid var(--border-dim);border-radius:8px;padding:6px 10px;">
+        <div style="color:var(--text-3);font-size:.65rem;margin-bottom:2px;">${k.replace(/_/g,' ')}</div>
+        <div style="color:var(--neon-blue);">${typeof v==='number'&&v<1?v.toFixed(4):v}</div>
+      </div>`;
+  });
+
+  // Smooth scroll to result on mobile
+  if(window.innerWidth < 900){
+    document.getElementById('result-container').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+function featureBar(name, val, color, maxVal) {
+  const pct = Math.min((Math.abs(val) / maxVal) * 100, 100).toFixed(1);
+  return `
+    <div class="feature-bar">
+      <span class="feat-name">${name}</span>
+      <div class="feat-track">
+        <div class="feat-fill" style="width:${pct}%;background:linear-gradient(90deg,${color}88,${color});"></div>
+      </div>
+      <span class="feat-val">${val.toFixed(1)}</span>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════
+   MODEL DASHBOARD
+══════════════════════════════════════════════ */
+function buildDashboard(){
+  const container = document.getElementById('model-cards');
+  container.innerHTML = '';
+
+  const sortedModels = Object.entries(MODEL_RESULTS).sort(([,a],[,b]) => (b.roc_auc||0)-(a.roc_auc||0));
+  const bestAUC = sortedModels[0]?.[1]?.roc_auc || 0;
+  document.getElementById('best-auc-hero').textContent = ((bestAUC||.993)*100).toFixed(1) + '%';
+
+  const colors = ['#5eb8ff','#b794f4','#2dd4bf','#f59e0b','#fc6b6b','#fb923c','#f472b6','#22d3ee'];
+
+  sortedModels.forEach(([name, metrics], idx) => {
+    const isBest = name === BEST_MODEL;
+    const auc    = metrics.roc_auc || 0;
+    const aucPct = ((auc - 0.85) / (1.0 - 0.85) * 100).toFixed(1);
+    const color  = colors[idx % colors.length];
+
+    const card = document.createElement('div');
+    card.className = `glass model-card${isBest?' best-model':''}`;
+    card.innerHTML = `
+      ${isBest ? '<span class="best-crown">🏆 BEST</span>' : ''}
+      <div class="model-name" style="color:${color}">${name}</div>
+      <div class="model-metrics">
+        <div class="metric-chip">
+          <div class="metric-name">Accuracy</div>
+          <div class="metric-val">${((metrics.accuracy||0)*100).toFixed(2)}%</div>
+        </div>
+        <div class="metric-chip">
+          <div class="metric-name">F1-Score</div>
+          <div class="metric-val">${((metrics.f1||0)*100).toFixed(2)}%</div>
+        </div>
+        <div class="metric-chip">
+          <div class="metric-name">Precision</div>
+          <div class="metric-val">${((metrics.precision||0)*100).toFixed(2)}%</div>
+        </div>
+        <div class="metric-chip">
+          <div class="metric-name">Recall</div>
+          <div class="metric-val">${((metrics.recall||0)*100).toFixed(2)}%</div>
+        </div>
+      </div>
+      <div class="auc-bar-wrap">
+        <span class="auc-bar-label" style="color:${color}">AUC</span>
+        <div class="auc-bar-track">
+          <div class="auc-bar-fill" style="width:0%;background:linear-gradient(90deg,${color}66,${color});"
+               data-pct="${aucPct}"></div>
+        </div>
+        <span class="auc-bar-val" style="color:${color}">${(auc*100).toFixed(2)}%</span>
+      </div>
+    `;
+    container.appendChild(card);
+
+    // Animate AUC bar
+    setTimeout(()=>{
+      card.querySelector('.auc-bar-fill').style.width = aucPct + '%';
+    }, 100 + idx * 80);
+  });
+}
+
+/* ══════════════════════════════════════════════
+   FEATURE IMPORTANCE
+══════════════════════════════════════════════ */
+function buildFeatureImportance(){
+  const container = document.getElementById('fi-grid');
+  container.innerHTML = '';
+  if(!FEAT_IMP || Object.keys(FEAT_IMP).length === 0) return;
+
+  const sorted = Object.entries(FEAT_IMP).sort(([,a],[,b])=>b-a);
+  const maxImp = sorted[0]?.[1] || 1;
+
+  sorted.forEach(([feat, imp], idx) => {
+    const pct = (imp / maxImp * 100).toFixed(1);
+    const hue = 220 - idx * 8;
+    container.innerHTML += `
+      <div class="fi-item">
+        <div class="fi-name">${feat.replace(/_/g,' ')}</div>
+        <div class="fi-track">
+          <div class="fi-fill" style="width:0%;background:hsl(${hue},80%,65%);" data-pct="${pct}"></div>
+        </div>
+        <div class="fi-val">${(imp*100).toFixed(2)}%</div>
+      </div>`;
+  });
+
+  // Animate
+  setTimeout(()=>{
+    container.querySelectorAll('.fi-fill').forEach(el => {
+      el.style.transition = 'width 1s ease';
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 300);
+}
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+buildDashboard();
+buildFeatureImportance();
+</script>
+
+</body>
+</html>
