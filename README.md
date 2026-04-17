@@ -67,34 +67,30 @@ NeuroCollab is a machine learning solution that predicts academic collaboration 
 
 ## ⚡ Quick Start
 
-> **Choose your favorite way to get started!**
+**Choose your favorite way to get started!**
 
-<details open>
-<summary><b>🌐 Option 1: Try Online (5 seconds — No Setup!)</b></summary>
+### 🌐 Option 1: Try Online (5 seconds — No Setup!)
 
 **Zero setup, instant access!**
 ```
 👉 Open: https://huggingface.co/spaces/harish-raja/neurocollab
-   
-   → Interactive Gradio UI
-   → Real-time predictions
-   → Live visualizations
+
+   ✨ Interactive Gradio UI
+   ✨ Real-time predictions
+   ✨ Live visualizations
 ```
 
-</details>
-
-<details>
-<summary><b>💻 Option 2: Run Locally (2 minutes)</b></summary>
+### 💻 Option 2: Run Locally (2 minutes)
 
 ```bash
-# 1️⃣ Clone repository
+# Clone repository
 git clone https://github.com/Harish-Raja-R/neurocollab.git
 cd neurocollab
 
-# 2️⃣ Install dependencies
+# Install dependencies
 pip install -r requirements.txt
 
-# 3️⃣ Choose your UI:
+# Choose your UI:
 
 # 🔵 Flask (Recommended for beginners)
 cd flask_app && python app.py
@@ -109,10 +105,7 @@ python gradio_app.py
 # → Open http://localhost:7860
 ```
 
-</details>
-
-<details>
-<summary><b>🐍 Option 3: Use as Python Module</b></summary>
+### 🐍 Option 3: Use as Python Module
 
 ```python
 from pipeline import predict, batch_predict
@@ -136,24 +129,19 @@ results = batch_predict([
 ])
 ```
 
-</details>
-
-<details>
-<summary><b>📓 Option 4: Interactive Jupyter Notebook</b></summary>
+### 📓 Option 4: Interactive Jupyter Notebook
 
 ```bash
 jupyter notebook NeuroCollab_Tutorial.ipynb
-
-# 📋 Complete ML pipeline:
-#   ✅ Load & explore DBLP graph (317K nodes)
-#   ✅ Engineer 25 features across 5 categories
-#   ✅ Train 5 models + voting ensemble
-#   ✅ 30+ publication-quality visualizations
-#   ✅ Make predictions with explanations
-#   ✅ API integration examples
 ```
 
-</details>
+**Complete ML pipeline included:**
+- Load & explore DBLP graph (317K nodes)
+- Engineer 25 features across 5 categories
+- Train 5 models + voting ensemble
+- 30+ publication-quality visualizations
+- Make predictions with explanations
+- API integration examples
 
 ---
 
@@ -354,24 +342,18 @@ curl -X POST http://localhost:5000/predict \
 
 ### Model Accuracy Comparison
 
-```
-┌────────────────────────────────────────────────────────────┐
-│                  ALL MODELS EVALUATED                      │
-├────────────────────────────────────────────────────────────┤
-│ Model              │ Accuracy │ F1-Score │ AUC-ROC │      │
-├────────────────────┼──────────┼──────────┼─────────┤      │
-│ Logistic Reg       │ 85.2%    │ 85.1%    │ 91.4%   │      │
-│ Random Forest      │ 96.8%    │ 96.8%    │ 99.6%   │      │
-│ XGBoost            │ 97.2%    │ 97.2%    │ 99.8%   │      │
-│ LightGBM           │ 97.3%    │ 97.3%    │ 99.8%   │ ⭐ Best
-│ MLP Neural Net     │ 97.2%    │ 97.2%    │ 99.7%   │      │
-├────────────────────┼──────────┼──────────┼─────────┤      │
-│ Voting Ensemble    │ 97.1%    │ 97.1%    │ 99.8%   │ 🏆 Prod
-└────────────────────────────────────────────────────────────┘
+| Model | Accuracy | F1-Score | AUC-ROC | Notes |
+|-------|----------|----------|---------|-------|
+| Logistic Regression | 85.2% | 85.1% | 91.4% | Baseline |
+| Random Forest | 96.8% | 96.8% | 99.6% | Good |
+| XGBoost | 97.2% | 97.2% | 99.8% | Excellent |
+| LightGBM | 97.3% | 97.3% | 99.8% | ⭐ **Best** |
+| MLP Neural Net | 97.2% | 97.2% | 99.7% | Excellent |
+| **Voting Ensemble** | **97.1%** | **97.1%** | **99.8%** | **🏆 Production** |
 
-⭐ LightGBM: Highest single-model accuracy
-🏆 Voting Ensemble: Most stable, production-recommended
-```
+**Key Findings:**
+- ⭐ **LightGBM**: Highest single-model accuracy (97.3%)
+- 🏆 **Voting Ensemble**: Most stable, production-recommended (97.1% + 0.8% CV)
 
 ### vs. Published Benchmarks
 
@@ -382,34 +364,26 @@ curl -X POST http://localhost:5000/predict \
 | Clauset et al. | 2008 | 93-95% | 97.1% | +2.1-4.1% ✅ |
 | Rahman & Sadegh | 2016 | 93-96% | 97.1% | +1.1-4.1% ✅ |
 
-**Conclusion:** ✅ **Outperforms all published benchmarks**
-
 ---
 
 ## 📊 Detailed Performance Benchmarking
 
 ### Comprehensive Metrics Comparison
 
-```
-╔═══════════════════════════════════════════════════════════════════════════╗
-║                  COMPLETE MODEL PERFORMANCE MATRIX                        ║
-╠═══════════════════════════════════════════════════════════════════════════╣
-║ Metric              │LogReg │RandFor │ XGB  │LGB   │MLP   │Voting│Winner
-╠─────────────────────┼───────┼────────┼──────┼──────┼──────┼──────┼────────
-║ Accuracy            │85.2%  │96.8%   │97.2% │97.3% │97.2% │97.1% │LGB
-║ Precision           │84.7%  │96.5%   │97.0% │97.1% │96.9% │96.9% │LGB
-║ Recall              │85.6%  │97.1%   │97.4% │97.5% │97.5% │97.3% │LGB
-║ F1-Score            │85.1%  │96.8%   │97.2% │97.3% │97.2% │97.1% │LGB
-║ AUC-ROC             │91.4%  │99.6%   │99.8% │99.8% │99.7% │99.8% │LGB/XGB
-║ Matthews CC         │71.2%  │93.6%   │94.4% │94.7% │94.2% │94.3% │LGB
-║ Balanced Accuracy   │85.3%  │96.9%   │97.3% │97.4% │97.3% │97.1% │LGB
-│ Specificity         │84.8%  │96.7%   │97.1% │97.2% │97.1% │97.0% │LGB
-║ CV Std Dev          │2.1%   │1.3%    │1.1%  │0.9%  │1.5%  │0.8%  │Voting⭐
-║ Training Time       │0.8s   │3.2s    │5.1s  │4.2s  │8.5s  │15s   │LogReg
-╚═══════════════════════════════════════════════════════════════════════════╝
+| Metric | LogReg | RandFor | XGB | LGB | MLP | Voting | Winner |
+|--------|--------|---------|-----|-----|-----|--------|--------|
+| Accuracy | 85.2% | 96.8% | 97.2% | 97.3% | 97.2% | 97.1% | LGB |
+| Precision | 84.7% | 96.5% | 97.0% | 97.1% | 96.9% | 96.9% | LGB |
+| Recall | 85.6% | 97.1% | 97.4% | 97.5% | 97.5% | 97.3% | LGB |
+| F1-Score | 85.1% | 96.8% | 97.2% | 97.3% | 97.2% | 97.1% | LGB |
+| AUC-ROC | 91.4% | 99.6% | 99.8% | 99.8% | 99.7% | 99.8% | LGB/XGB |
+| Matthews CC | 71.2% | 93.6% | 94.4% | 94.7% | 94.2% | 94.3% | LGB |
+| Balanced Accuracy | 85.3% | 96.9% | 97.3% | 97.4% | 97.3% | 97.1% | LGB |
+| Specificity | 84.8% | 96.7% | 97.1% | 97.2% | 97.1% | 97.0% | LGB |
+| CV Std Dev | 2.1% | 1.3% | 1.1% | 0.9% | 1.5% | 0.8% | Voting ⭐ |
+| Training Time | 0.8s | 3.2s | 5.1s | 4.2s | 8.5s | 15s | LogReg |
 
-🏆 Winner: LightGBM (accuracy) + Voting Ensemble (stability)
-```
+**🏆 Winner**: LightGBM (accuracy) + Voting Ensemble (stability)
 
 ### Model Ranking by Use Case
 
@@ -421,71 +395,50 @@ curl -X POST http://localhost:5000/predict \
 | **Best Trade-off** | **Voting** | LGB | XGB | **Voting** ✅ |
 | **Production Ready** | **Voting** | LGB | XGB | **Voting** ✅ |
 
-### ROC-AUC Curve Analysis
-```
-AUC-ROC (1.0 = Perfect Classifier)
+### ROC-AUC Performance Analysis
 
-99.8% ┌─────────────────────── LGB ──●
-      │                       XGB ──●
-      │                       Voting ──●
-      │ 99.7% ─── MLP ──● (all performing exceptionally)
-      │
-99.6% │ RandFor ──●
-      │
-99.0% │
-      │
-97.5% │
-      │        ●─── XGBoost (97.2% Acc)
-      │       ● LGB (97.3% Acc)
-95.0% │      ●─── MLP (97.2% Acc)
-      │    ●───── RandFor (96.8% Acc)
-      │ ●──────── LogReg (85.2% Acc)
-90.0% │
-      │
-      └──────────────────────────────
+- **99.8% AUC-ROC**: LGB, XGB, Voting (near-perfect classifiers)
+- **99.7% AUC-ROC**: MLP (excellent performance)
+- **99.6% AUC-ROC**: Random Forest (very good)
+- **91.4% AUC-ROC**: LogReg (good baseline)
 
-Key Insight: All boosting models are near-perfect. 
-Voting is most robust across different thresholds.
-```
+**Key Insight**: All boosting models exceed 99.6% AUC-ROC. Voting Ensemble is most robust across different thresholds.
 
-### Feature Importance Ranking
+### Feature Importance Ranking (Top 15)
 
-**Top 15 Most Predictive Features** (SHAP-based):
-```
-1.  common_neighbors        ████████████████ 18.2%  ← Most important
-2.  jaccard_index          ███████████████  16.5%
-3.  adamic_adar            ██████████████   14.8%
-4.  same_community         ████████████     13.1%
-5.  resource_allocation    ███████████      11.6%
-6.  pagerank_u             ██████████       10.2%
-7.  degree_product         █████████        8.9%
-8.  clustering_u           █████████        8.7%
-9.  avg_clustering         ████████         7.4%
-10. salton_index           ████████         7.2%
-11. triangles_u            ███████          6.8%
-12. pagerank_v             ███████          6.4%
-13. sorensen_index         ██████           5.9%
-14. clust_coeff_ratio      ██████           5.6%
-15. comm_size_ratio        ██████           5.3%
+| Rank | Feature | Impact | Visual |
+|------|---------|--------|--------|
+| 1 | common_neighbors | 18.2% | ████████████████ |
+| 2 | jaccard_index | 16.5% | ███████████████ |
+| 3 | adamic_adar | 14.8% | ██████████████ |
+| 4 | same_community | 13.1% | ████████████ |
+| 5 | resource_allocation | 11.6% | ███████████ |
+| 6 | pagerank_u | 10.2% | ██████████ |
+| 7 | degree_product | 8.9% | █████████ |
+| 8 | clustering_u | 8.7% | █████████ |
+| 9 | avg_clustering | 7.4% | ████████ |
+| 10 | salton_index | 7.2% | ████████ |
+| 11 | triangles_u | 6.8% | ███████ |
+| 12 | pagerank_v | 6.4% | ███████ |
+| 13 | sorensen_index | 5.9% | ██████ |
+| 14 | clust_coeff_ratio | 5.6% | ██████ |
+| 15 | comm_size_ratio | 5.3% | ██████ |
 
-Remaining 10 features: < 5% impact each
-```
+**Remaining 10 features**: < 5% impact each
 
 ### Confusion Matrix Analysis
 
 ```
-                        Predicted
-                   Not Compatible  Compatible
-              ┌──────────────────────────────┐
-Actual        │      TN: 890    │   FP: 10  │  NPV: 98.9%
-Not           │      (98.8%)    │  (1.2%)   │
-Compatible    ├──────────────────────────────┤
-              │      FN: 12     │  TP: 888  │  PPV: 98.8%
-Compatible    │      (1.3%)     │ (98.7%)   │
-              └──────────────────────────────┘
-               Specificity: 98.8%  Sensitivity: 98.7%
+                    Predicted Not Compatible    Compatible
+─────────────────────────────────────────────────────────────
+Actual Not Comp │   TN: 890 (98.8%)   │  FP: 10 (1.2%)    │
+                │                     │                   │
+Compatible      │   FN: 12 (1.3%)     │  TP: 888 (98.7%) │
+─────────────────────────────────────────────────────────────
 
-Interpretation:
+Specificity: 98.8%  |  Sensitivity: 98.7%
+NPV: 98.9%          |  PPV: 98.8%
+
 ✅ Model correctly identifies 98.7% compatible pairs (HIGH RECALL)
 ✅ Model correctly rejects 98.8% non-compatible pairs (HIGH SPECIFICITY)
 ✅ Balanced performance (no significant class bias)
@@ -730,20 +683,14 @@ model_pipeline = Pipeline([
 
 ### 4.2 Results Table
 
-```
-╔════════════════════════════════════════════════════════════╗
-║                    MODEL PERFORMANCE                       ║
-╠════════════════════════════════════════════════════════════╣
-║ Metric          │ LightGBM │ XGBoost │ Voting │ Baseline  ║
-├─────────────────┼──────────┼─────────┼────────┼───────────┤
-║ Accuracy        │ 97.3%    │ 97.2%   │ 97.1%  │ 85.2%     ║
-║ F1-Score        │ 97.3%    │ 97.2%   │ 97.1%  │ 85.1%     ║
-║ AUC-ROC         │ 99.8%    │ 99.8%   │ 99.8%  │ 91.4%     ║
-║ MCC             │ 94.7%    │ 94.3%   │ 94.3%  │ 71.2%     ║
-║ Balanced Acc.   │ 97.4%    │ 97.2%   │ 97.1%  │ 85.3%     ║
-║ CV Std Dev      │ 0.9%     │ 1.1%    │ 0.8%   │ 2.1%      ║
-╚════════════════════════════════════════════════════════════╝
-```
+| Metric | LightGBM | XGBoost | Voting | Baseline |
+|--------|----------|---------|--------|----------|
+| Accuracy | 97.3% | 97.2% | 97.1% | 85.2% |
+| F1-Score | 97.3% | 97.2% | 97.1% | 85.1% |
+| AUC-ROC | 99.8% | 99.8% | 99.8% | 91.4% |
+| MCC | 94.7% | 94.3% | 94.3% | 71.2% |
+| Balanced Acc. | 97.4% | 97.2% | 97.1% | 85.3% |
+| CV Std Dev | 0.9% | 1.1% | 0.8% | 2.1% |
 
 ### 4.3 Visualizations Generated
 
@@ -1038,102 +985,94 @@ results = batch_predict(pairs)
 ## Project Architecture
 
 ### 🏗️ System Design
+
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                         NEUROCOLLAB v3.0 MAX ARCHITECTURE                 │
-└──────────────────────────────────────────────────────────────────────────┘
+NEUROCOLLAB v3.0 MAX ARCHITECTURE
+=====================================
 
-                            📊 DATA LAYER
-                            ─────────────
-                    ┌──────────────────────┐
-                    │  Stanford SNAP Graph │
-                    │  - 317K researchers  │
-                    │  - 1M+ edges         │
-                    │  - 13.5K communities │
-                    └──────────────┬───────┘
-                                   │
-
-                      🔧 FEATURE ENGINEERING LAYER
-                      ────────────────────────────
-        ┌─────────────────────┬──────────────────────┬──────────────────┐
-        │  Network Features   │ Structural Features  │ Community Effect  │
-        │  - Common Neighbors │ - Preferential Attach│ - Same Community  │
-        │  - Jaccard Index    │ - Degree Similarity  │ - Shared Groups   │
-        │  - Adamic-Adar      │ - Clustering Patterns│ - Modularity      │
-        └─────────────────────┴──────────────────────┴──────────────────┘
-                                   │
-                            (25 total features)
-                                   │
-
-                         🤖 ML MODEL LAYER
-                         ─────────────────
-        ┌──────────────────┬──────────────────┬──────────────────┐
-        │   XGBoost        │   LightGBM       │   MLP Neural Net │
-        │   97.2% Acc      │   97.3% Acc      │   97.2% Acc      │
-        └─────────┬────────┴────────┬─────────┴────────┬─────────┘
-                  │                 │                  │
-                  └─────────────────┼──────────────────┘
-                                    │
-                    📊 Voting Ensemble (Hard Vote)
-                    ✨ 97.1% Accuracy + Robustness
-                                    │
-
-                         🎯 INFERENCE LAYER
-                         ──────────────────
-           ┌─────────────────────┬─────────────────────┐
-           │  Score Calculation  │  Explainability     │
-           │  - 0-100 range      │  - SHAP values      │
-           │  - Confidence %     │  - Feature impact   │
-           │  - Verdict text     │  - Insights         │
-           └─────────────────────┴─────────────────────┘
-                                   │
-
-                    🌐 PRESENTATION LAYER (UIs)
-                    ──────────────────────────
-        ┌──────────────────┬──────────────────┬──────────────────┐
-        │   Flask Local    │   Streamlit      │    Gradio (HF)   │
-        │   http://host:   │   Dashboard      │   Public Cloud   │
-        │   5000           │   Port 8501      │   Port 7860      │
-        └──────────────────┴──────────────────┴──────────────────┘
-                                   │
-
-                     ☁️ DEPLOYMENT OPTIONS
-                     ────────────────────
-        ┌──────────────────┬──────────────────┬──────────────────┐
-        │   Docker Image   │  Render.com      │  Hugging Face    │
-        │   Containerized  │  Auto-deploy     │  Spaces (Public) │
-        │   Multi-service  │  With YAML       │  Zero Config     │
-        └──────────────────┴──────────────────┴──────────────────┘
+                    📊 DATA LAYER
+                    
+    Stanford SNAP Graph
+    ✓ 317K researchers
+    ✓ 1M+ edges
+    ✓ 13.5K communities
+                    ↓
+                    
+    🔧 FEATURE ENGINEERING LAYER
+    
+    Network Features    Structural Features    Community
+    ✓ Common Neighbors  ✓ Preferential Attach  ✓ Same Community
+    ✓ Jaccard Index     ✓ Degree Similarity    ✓ Shared Groups
+    ✓ Adamic-Adar       ✓ Clustering           ✓ Modularity
+    
+    (25 total features)
+                    ↓
+                    
+    🤖 ML MODEL LAYER
+    
+    XGBoost (97.2%) | LightGBM (97.3%) | MLP (97.2%)
+                    ↓
+    📊 Voting Ensemble
+    ✨ 97.1% Accuracy + Robustness
+                    ↓
+                    
+    🎯 INFERENCE LAYER
+    
+    Score Calculation    Explainability
+    ✓ 0-100 range       ✓ SHAP values
+    ✓ Confidence %      ✓ Feature impact
+    ✓ Verdict text      ✓ Insights
+                    ↓
+                    
+    🌐 PRESENTATION LAYER (UIs)
+    
+    Flask Local      Streamlit       Gradio (HF)
+    Port 5000        Port 8501       Port 7860
+                    ↓
+                    
+    ☁️ DEPLOYMENT OPTIONS
+    
+    Docker Image     Render.com      Hugging Face
+    Containerized    Auto-deploy     Spaces (Public)
 ```
 
 ### 📋 Component Details
 
 | Component | Technology | Purpose | Status |
 |-----------|-----------|---------|--------|
-| **Data Processing** | NetworkX, NumPy | Graph loading & topology analysis | ✅ |
-| **Feature Engine** | Scikit-Learn Custom Transformer | 25-feature vectorization | ✅ |
-| **ML Pipeline** | Scikit-Learn Pipeline | Reproducible preprocessing + inference | ✅ |
-| **Ensemble** | VotingClassifier | Combine 5+ models with voting | ✅ |
-| **API Server** | Flask | RESTful endpoints + web UI | ✅ |
-| **Dashboards** | Streamlit, Gradio | Interactive inference interfaces | ✅ |
-| **Deployment** | Docker, Render, HF Spaces | Multi-platform distribution | ✅ |
-| **XAI** | SHAP, Permutation | Prediction explanations | ✅ |
+| Data Processing | NetworkX, NumPy | Graph loading & topology analysis | ✅ |
+| Feature Engine | Scikit-Learn Custom Transformer | 25-feature vectorization | ✅ |
+| ML Pipeline | Scikit-Learn Pipeline | Reproducible preprocessing + inference | ✅ |
+| Ensemble | VotingClassifier | Combine 5+ models with voting | ✅ |
+| API Server | Flask | RESTful endpoints + web UI | ✅ |
+| Dashboards | Streamlit, Gradio | Interactive inference interfaces | ✅ |
+| Deployment | Docker, Render, HF Spaces | Multi-platform distribution | ✅ |
+| XAI | SHAP, Permutation | Prediction explanations | ✅ |
 
-### 🔄 Data Flow Diagram
+### 🔄 Data Flow
+
 ```
 User Input (25 Features)
-    └─→ Feature Validation
-        └─→ Scikit-Learn Imputer (handle missing)
-            └─→ RobustScaler (normalize with outlier resistance)
-                └─→ Model Ensemble
-                    ├─→ XGBoost.predict_proba()
-                    ├─→ LightGBM.predict_proba()
-                    ├─→ MLP.predict_proba()
-                    └─→ Voting (Hard Vote)
-                        └─→ Calibrated Score (0-100)
-                            └─→ Confidence Probability
-                                └─→ Verdict + Explanations
-                                    └─→ JSON Response (API/UI)
+    ↓
+Feature Validation
+    ↓
+Scikit-Learn Imputer
+    ↓
+RobustScaler (normalize with outlier resistance)
+    ↓
+Model Ensemble
+    ├─ XGBoost.predict_proba()
+    ├─ LightGBM.predict_proba()
+    ├─ MLP.predict_proba()
+    └─ Voting (Hard Vote)
+    ↓
+Calibrated Score (0-100)
+    ↓
+Confidence Probability
+    ↓
+Verdict + Explanations
+    ↓
+JSON Response (API/UI)
 ```
 ```
 neurocollab/
@@ -1515,12 +1454,12 @@ If you use NeuroCollab in your research, please cite:
 
 ## ❓ Troubleshooting & FAQs
 
-### Common Issues
+### Common Issues & Solutions
 
-<details>
-<summary><b>❌ Error: "ModuleNotFoundError: No module named 'pipeline'"</b></summary>
+#### ❌ Error: "ModuleNotFoundError: No module named 'pipeline'"
 
 **Cause**: Running scripts from wrong directory
+
 ```bash
 # ❌ Wrong
 cd flask_app
@@ -1533,12 +1472,12 @@ python -m flask_app.app  # Or add path to PYTHONPATH
 cd flask_app && PYTHONPATH=.. python app.py
 ```
 
-</details>
+---
 
-<details>
-<summary><b>❌ Error: "No such file or directory: 'com-DBLP.mtx'"</b></summary>
+#### ❌ Error: "No such file or directory: 'com-DBLP.mtx'"
 
 **Cause**: Graph data files missing
+
 ```bash
 # Check if files exist
 ls -la *.mtx  # Should show 4 .mtx files
@@ -1548,28 +1487,28 @@ ls -la *.mtx  # Should show 4 .mtx files
 # Put all .mtx files in project root
 ```
 
-</details>
+---
 
-<details>
-<summary><b>❌ Error: "MemoryError" or "OutOfMemory"</b></summary>
+#### ❌ Error: "MemoryError" or "OutOfMemory"
 
 **Cause**: Insufficient RAM for large graph
+
 ```bash
 # Solutions:
-1. Use top5000 subset instead of full graph
-   # Edit build_project_max.py line 15:
-   # mtx_file = 'com-DBLP_Communities_top5000.mtx'
+# 1. Use top5000 subset instead of full graph
+#    Edit build_project_max.py line 15:
+#    mtx_file = 'com-DBLP_Communities_top5000.mtx'
 
-2. Increase system swap
-3. Run on machine with >8GB RAM
+# 2. Increase system swap
+# 3. Run on machine with >8GB RAM
 ```
 
-</details>
+---
 
-<details>
-<summary><b>❌ Error: "Connection refused" on localhost:5000</b></summary>
+#### ❌ Error: "Connection refused" on localhost:5000
 
 **Cause**: Port already in use or Flask not running
+
 ```bash
 # Check if port is in use
 lsof -i :5000  # macOS/Linux
@@ -1579,25 +1518,25 @@ netstat -ano | findstr :5000  # Windows
 python app.py --port 5001
 ```
 
-</details>
+---
 
-<details>
-<summary><b>❌ Error: "ImportError: sklearn.pipeline"</b></summary>
+#### ❌ Error: "ImportError: sklearn.pipeline"
 
 **Cause**: Old scikit-learn version
+
 ```bash
 # Update scikit-learn
 pip install --upgrade scikit-learn>=1.0.0
 ```
 
-</details>
+---
 
-### FAQs
+### Frequently Asked Questions
 
-<details>
-<summary><b>Q: How do I make predictions on my own data?</b></summary>
+#### Q: How do I make predictions on my own data?
 
 **A**: Use the pipeline module:
+
 ```python
 from pipeline import predict
 
@@ -1614,10 +1553,9 @@ result = predict(**features)
 print(f"Score: {result.score}, Verdict: {result.verdict}")
 ```
 
-</details>
+---
 
-<details>
-<summary><b>Q: Can I use the model on a different co-authorship dataset?</b></summary>
+#### Q: Can I use the model on a different co-authorship dataset?
 
 **A**: Yes! As long as you:
 1. Extract the same 25 features from your graph
@@ -1636,22 +1574,21 @@ with open('models/best_model.pkl', 'rb') as f:
 predictions = model.predict(your_feature_matrix)
 ```
 
-</details>
+---
 
-<details>
-<summary><b>Q: How accurate is the model for unseen networks?</b></summary>
+#### Q: How accurate is the model for unseen networks?
 
 **A**: 
 - **Same domain (DBLP co-authorship)**: ~97.1% (cross-validated)
 - **Different domains (social networks)**: 90-95% expected (domain shift)
 - **Recommendation**: Retrain on your domain-specific data for best results
 
-</details>
+---
 
-<details>
-<summary><b>Q: Can I deploy with GPU acceleration?</b></summary>
+#### Q: Can I deploy with GPU acceleration?
 
 **A**: Yes! Use GPU-enabled libraries:
+
 ```bash
 # Install GPU versions
 pip install xgboost[gpu]  # XGBoost with CUDA support
@@ -1661,10 +1598,9 @@ pip install lightgbm  # Compiled with GPU support
 pip install tensorflow-gpu  # Or PyTorch with CUDA
 ```
 
-</details>
+---
 
-<details>
-<summary><b>Q: What's the inference latency for a single prediction?</b></summary>
+#### Q: What's the inference latency for a single prediction?
 
 **A**: 
 - **Python API**: ~5-10ms per prediction
@@ -1673,12 +1609,12 @@ pip install tensorflow-gpu  # Or PyTorch with CUDA
 
 Bottleneck: Feature engineering + ensemble voting
 
-</details>
+---
 
-<details>
-<summary><b>Q: Can I retrain the model with new data?</b></summary>
+#### Q: Can I retrain the model with new data?
 
 **A**: Yes! Modify `build_project_max.py`:
+
 ```python
 # Load your training data
 X_train, y_train = load_your_data()
@@ -1692,10 +1628,9 @@ model.fit(X_train, y_train)
 pickle.dump(model, open('models/retrained_model.pkl', 'wb'))
 ```
 
-</details>
+---
 
-<details>
-<summary><b>Q: How do I update the requirements.txt?</b></summary>
+#### Q: How do I update the requirements.txt?
 
 **A**: 
 ```bash
@@ -1706,8 +1641,6 @@ pip freeze > requirements.txt
 pip install package-name==version
 pip freeze | grep package-name >> requirements.txt
 ```
-
-</details>
 
 ---
 
