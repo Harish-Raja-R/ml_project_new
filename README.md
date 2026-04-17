@@ -75,13 +75,14 @@ Achieves:
 ## 🎯 Key Statistics
 
 ```text
-📈 DATASET SCALE        │ 🤖 MODEL PERFORMANCE      │ 🎨 FEATURE ENGINEERING
-─────────────────────────────────────────────────────────────────────────────
-Researchers:   317,080  │ Accuracy:   97.1%        │ Total Features:   25
-Edges:       1,049,866  │ F1-Score:   97.1%        │ Neighborhood:      6
-Communities:    13,477  │ AUC-ROC:    99.8%        │ Structural:        6
-Avg Degree:        6.62 │ MCC:        94.3%        │ Community:         3
-Network Dia:         22 │ Balanced:   97.1%        │ Clustering:        5
+DATASET SCALE        │ MODEL PERFORMANCE        │ FEATURE ENGINEERING
+────────────────────────────────────────────────────────────────────
+Researchers: 317,080 │ Accuracy: 97.1%          │ Total Features: 25
+Edges: 1,049,866     │ F1-Score: 97.1%          │ Neighborhood: 6
+Communities: 13,477  │ AUC-ROC: 99.8%           │ Structural: 6
+Avg Degree: 6.62     │ MCC: 94.3%               │ Community: 3
+Network Dia: 22      │ Balanced: 97.1%          │ Clustering: 5
+````
 
 ---
 
